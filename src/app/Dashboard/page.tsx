@@ -10,16 +10,18 @@ import {
   Modal,
   TextInput,
 } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // the @ when pathing through our folder structure represents our root folder
 import BlogEntries from '@/utils/BlogEntries.json';
-import { IBlogItem } from "@/Interfaces/Interfaces";
+import { IBlogItems } from "@/Interfaces/Interfaces";
 import NavBarComponent from "../components/NavbarComponent";
+import { checkToken, getBlogItemsByUserId, loggedInData } from "@/utils/Dataservices";
+import { useRouter } from "next/navigation";
 
 //User's Dashboard page with their Published and unpublished Blog entries, we will also Add / Edit blog Entries
 const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [blogItems, setBlogItems] = useState<IBlogItem[]>(BlogEntries);
+  const [blogItems, setBlogItems] = useState<IBlogItems[]>([]);
 
   // Forms
   // Description, tags, categories, title, and Image
@@ -28,9 +30,38 @@ const Dashboard = () => {
   const [tags, setTags] = useState<string>("");
   const [categories, setCategories] = useState<string>("");
   const [img, setImg] = useState<any>("");
+  const [blogUserId, setBlogUserId] = useState<number>(0);
+  const [publisherName, setPublisherName] = useState<string>("");
+  const [blogId, setBlogId] = useState<number>(0);
 
   //Booleans
   const [editBool, setEditBool] = useState<boolean>(true);
+
+  let router = useRouter();
+
+  // This useEffect will grab the user's information as well as their blog info,
+  // Will perform a check if user is logged in if not it will take them to the login page
+  useEffect(() => {
+
+    // Async function because we are calling getBlogItemsById Fetch
+    const getLoggedInData = async () => {
+      // Storing our user info in a variable
+      const loggedIn = loggedInData();
+      let userBlogItems = await getBlogItemsByUserId(loggedIn.id);
+      // Setting our user info / Fetched data inside of our State Variables
+      setBlogUserId(loggedIn.id);
+      setPublisherName(loggedIn.username);
+      setBlogItems(userBlogItems);
+    }
+
+
+    // Checks if We have a token in local storage if so get user info else go back to login
+    if(checkToken()){
+      getLoggedInData();
+    } else {
+      router.push('/')
+    }
+  }, [])
 
   const handleShow = () => {
     setOpenModal(true);
@@ -131,7 +162,7 @@ const Dashboard = () => {
                 <ListGroup className='w-484'>
 
                   {
-                    blogItems.map((item, idx) => {
+                    blogItems && blogItems.map((item, idx) => {
                       return (
                         <div key={idx}>
                           {
@@ -158,7 +189,7 @@ const Dashboard = () => {
                 <ListGroup className='w-484'>
 
                   {
-                    blogItems.map((item, idx) => {
+                    blogItems && blogItems.map((item, idx) => {
                       return (
                         <div key={idx}>
                           {

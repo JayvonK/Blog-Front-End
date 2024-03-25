@@ -1,4 +1,4 @@
-export interface IBlogItem {
+export interface IBlogItems {
     //keys can be start off in lowercase, becasue when returning data it will always start off as lowercase
     id: number,
     userID: number
@@ -11,4 +11,24 @@ export interface IBlogItem {
     categories: string
     isPublished: boolean
     isDeleted: boolean
+}
+
+//Get our token
+
+export interface IToken {
+    token: string
+}
+
+//For Login and Create account fetch
+
+export interface IUserInfo {
+    username: string,
+    password: string
+}
+
+//This for getting user's info Id and username
+
+export interface IUserData {
+    id: number,
+    username: string
 }
