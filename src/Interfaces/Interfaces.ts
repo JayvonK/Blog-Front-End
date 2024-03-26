@@ -29,6 +29,6 @@ export interface IUserInfo {
 //This for getting user's info Id and username
 
 export interface IUserData {
-    id: number,
-    username: string
+    userId: number,
+    publisherName: string
 }

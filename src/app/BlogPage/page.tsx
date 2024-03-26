@@ -1,12 +1,23 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBarComponent from '../components/NavbarComponent';
 import BlogEntries from '@/utils/BlogEntries.json';
-import { IBlogItem } from '@/Interfaces/Interfaces';
+import { IBlogItems } from '@/Interfaces/Interfaces';
+import { getAllBlogItems } from '@/utils/Dataservices';
 
 const BlogPage = () => {
-    const [blogItems, setBlogItems] = useState<IBlogItem[]>(BlogEntries)
+    const [blogItems, setBlogItems] = useState<IBlogItems[]>();
+
+    useEffect(() => {
+        const getData = async () => {
+            const data: IBlogItems[] = await getAllBlogItems();
+            const filteredData = data.filter(items => items.isPublished && items.isDeleted === false);
+            setBlogItems(filteredData);
+        }
+
+        getData()
+    }, [])
 
     return (
         <>
@@ -18,7 +29,7 @@ const BlogPage = () => {
                         <div>
 
                             {
-                                blogItems.map((item, idx) => {
+                               blogItems && blogItems.map((item, idx) => {
                                     return (
                                         <div key={item.id}>
                                             {
