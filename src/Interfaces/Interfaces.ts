@@ -1,5 +1,5 @@
 export interface IBlogItems {
-    //keys can be start off in lowercase, becasue when returning data it will always start off as lowercase
+    //keys can be start off in lowercase, because when returning data it will always start off as lowercase
     id: number,
     userID: number
     publishedName: string
