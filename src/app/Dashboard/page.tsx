@@ -137,7 +137,6 @@ const Dashboard = () => {
   const handleDelete = async (items: IBlogItems) => {
     items.isDeleted = !items.isDeleted;
     let result = await updateBlogItem(items);
-
     if (result) {
       const loggedIn = loggedInData();
       let userBlogItems: IBlogItems[] = await getBlogItemsByUserId(loggedIn.userId);
@@ -247,7 +246,6 @@ const Dashboard = () => {
               <Accordion.Title>Unpublished Blog Items</Accordion.Title>
               <Accordion.Content>
                 <ListGroup className='w-484'>
-
                   {
                     blogItems && blogItems.map((item, idx) => {
                       return (
@@ -266,7 +264,6 @@ const Dashboard = () => {
                       )
                     })
                   }
-
                 </ListGroup>
               </Accordion.Content>
             </Accordion.Panel>
